@@ -20,10 +20,11 @@ public class TimerForCrazyEight extends Frame implements ActionListener{
 	private Label l = new Label("30");
 	private Label taskL = new Label("Task track 0");
 	private Button bt = new Button("タスクトラック");
-	private Button btR = new Button("レストトラック");
-	private int count = 0;
-	private Timer timer = null;
-	public int taskTrack = 1; // max = 8
+	private Button btS = new Button("ストップ");
+	public int count_timer = 0;
+	public int iteration = 0;
+	public int track = 0;
+	public Timer timer = null;
 
 	//constructor
 	public TimerForCrazyEight() {
@@ -36,9 +37,7 @@ public class TimerForCrazyEight extends Frame implements ActionListener{
 			}
 		);
 
-		//タイトルを設定
-		setTitle("Timer for Crazy Eight!");
-
+		setTitle("Timer for Crazy Eight!");		//タイトルを設定
 		setLayout(new GridLayout(4,1));
 		l.setAlignment(Label.CENTER);
 		l.setFont(new Font("Arial", Font.PLAIN, 96));
@@ -46,9 +45,10 @@ public class TimerForCrazyEight extends Frame implements ActionListener{
 		add(taskL);
 		add(l);
 		add(bt);
-		add(btR);
+		add(btS);
+		btS.setEnabled(false);
 		bt.addActionListener(this);
-		btR.addActionListener(this);
+		btS.addActionListener(this);
 	}
 
 	//main method
@@ -61,35 +61,40 @@ public class TimerForCrazyEight extends Frame implements ActionListener{
 	// method
 	public void actionPerformed(ActionEvent ev){
 		if(ev.getSource() == bt){
-			count = 30;
-			taskL.setText("Track iteration is "+ Integer.toString( (taskTrack+1)/2 ));
-			if (timer == null) {
 				timer = new java.util.Timer(false);
 				timer.schedule(new MyTimeTask(), 1000l, 1000l);
-			}
 		}
-		if(ev.getSource() == btR){
-			count = 10;
-			taskL.setText("Rest!");
-			if (timer == null) {
-				timer = new java.util.Timer(false);
-				timer.schedule(new MyTimeTask(), 1000l, 1000l);
-			}
+
+		if(ev.getSource() == btS){
+			timer.cancel();
+			timer = null;
+			btS.setEnabled(false);
 		}
 	}
 
 	private class MyTimeTask extends TimerTask {
-		int count_timer = count;
 
 		@Override
 		public void run() {
 			if (count_timer > 0) {
 				count_timer --;
 				l.setText(Integer.toString(count_timer));
+				btS.setEnabled(true);
 			} else {
 				timer.cancel();
-				timer = null;
-				taskTrack++;
+				timer = new java.util.Timer(false);
+				timer.schedule(new MyTimeTask(), 1000l, 1000l);
+				if(iteration%2 == 0){
+					taskL.setText("Track iteration is "+ Integer.toString( track+1 ));
+					count_timer = 31;
+					iteration++;
+					track++;
+				} else {
+					taskL.setText("Rest!");
+					count_timer = 11;
+					iteration++;
+				}
+
 			}
 		}
 	}  // end of MyTimeTask
