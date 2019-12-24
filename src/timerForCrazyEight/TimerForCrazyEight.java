@@ -128,7 +128,6 @@ public class TimerForCrazyEight extends Frame implements ActionListener{
 					count_timer = TASK_TIME;
 					iteration++;
 					track++;
-					System.out.println(track);
 				} else {
 					if (track < MAX_track) {
 						taskL.setText("Rest!");
