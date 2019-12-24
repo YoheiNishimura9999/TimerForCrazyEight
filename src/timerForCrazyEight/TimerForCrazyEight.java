@@ -26,7 +26,7 @@ public class TimerForCrazyEight extends Frame implements ActionListener{
 	public int track = 0;
 	public Timer timer = null;
 
-	private int MAX_track = 3;
+	private int MAX_track = 8;
 
 	//constructor
 	public TimerForCrazyEight() {
